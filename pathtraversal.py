@@ -1,4 +1,5 @@
 import requests
+import time
 
 #setting up an empty session
 session = requests.session()
@@ -6,6 +7,12 @@ session.proxies = {}
 
 #way to access DO NOT USE requests use session like this:
 #r = session.get('https://jasonrigden.com')
+
+#leak test
+#it works, trust me
+#r = session.get("https://dnsleaktest.com/")
+#print("Leak test:\n",r.text)
+
 
 #check current IP
 r = session.get("http://httpbin.org/ip")
@@ -47,6 +54,12 @@ session.cookies.clear()
 r = session.get("http://httpbin.org/cookies")
 print("My NEW cookies:\n",r.text)
 
+#leak test
+#it works, trust me
+#r = session.get("https://dnsleaktest.com/")
+#print("Leak test:\n",r.text)
+
+
 print("ALL SETTED UP FOR YOU :)\n\n")
 
 url_input = input("Enter URL:\t")
@@ -59,8 +72,8 @@ for cheet in cheet_sheet:
     print("Trying with:\t", url, "\n")
     r = session.get(url)
     print("--------------------------OUTPUT:\n", r.text)
-    exit = input("Continue? (type 'Y' or 'Yes' or 'yes' or 'y' or 'YES' to continue)\t")
-    if (exit!="Y" and exit!="Yes" and exit!="yes" and exit!="y" and exit!="YES"):
+    exit = input("Continue?\t")
+    if (exit!="Y" and exit!="Yes" and exit!="yes" and exit!="y"):
         print("The end!\n")
         break
 
